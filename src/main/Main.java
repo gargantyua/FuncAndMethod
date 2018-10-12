@@ -1,69 +1,46 @@
 package main;
 
-//заполнить двумерный массив рандомом. вывести числа которые кратны двум. отрицательные числа возвести в квадрат. вывести массив.
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+/**
+ * Заполнить двумерный массив рандомом. вывести числа которые кратны двум. отрицательные числа возвести в квадрат. вывести массив.
+ */
 public class Main {
 
     public static void main(String[] args) {
 
-        int[][] array = inputArray();
+        List<Integer> array = inputArray(30);
 
-        getMultipleNumbers(array);
-        getNegativeNumbers(array);
+        System.out.print("Список рандомных чисел: ");
         outputArray(array);
 
+        System.out.print("Числа кратные двум: ");
+        outputArray(getMultipleNumbers(array));
+
+        System.out.print("Отрицательные числа в квадрате: ");
+        outputArray(getNegativeNumbers(array));
     }
 
     //заполнение массива
-    private static int[][] inputArray() {
-
-        int[][] array = new int[4][4];
-
-        System.out.print("Ваш массив: ");
-        for (int i = 0; i < array.length; i++) {
-            System.out.println();
-            for (int j = 0; j < array[i].length; j++) {
-                array[i][j] = (int) ((Math.random() * 99) - 50);
-                System.out.print(array[i][j] + " ");
-            }
-        }
-        return array;
+    private static List<Integer> inputArray(int capacity) {
+        return IntStream.generate(() -> (int) ((Math.random() * 99) - 50)).limit(capacity).boxed().collect(Collectors.toList());
     }
 
     //вывод чисел кратные двум
-    private static void getMultipleNumbers(int[][] array) {
-        System.out.println();
-        System.out.println("Числа кратные двум: ");
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++) {
-                if (array[i][j] % 2 == 0) {
-                    System.out.print(array[i][j] + " ");
-                }
-            }
-        }
+    private static List<Integer> getMultipleNumbers(List<Integer> array) {
+        return array.stream().filter(n -> n % 2 == 0).collect(Collectors.toList());
     }
 
     //отрицательные числа возводим в квадрат
-    private static void getNegativeNumbers(int[][] array) {
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++){
-                if (array[i][j] < 0){
-                    array[i][j] *= array[i][j];
-                }
-            }
-        }
+    private static List<Integer> getNegativeNumbers(List<Integer> array) {
+        return array.stream().filter(n -> n < 0).map(n -> n *= n).collect(Collectors.toList());
     }
 
     //вывод массива
-    private static void outputArray(int[][] array) {
+    private static void outputArray(List<Integer> array) {
+        array.forEach(integer -> System.out.print(integer + " "));
         System.out.println();
-        System.out.print("Новый массив: ");
-        for (int i = 0; i < array.length; i++){
-            System.out.println();
-            for (int j = 0; j < array[i].length; j++){
-                System.out.print(array[i][j] + " ");
-            }
-        }
     }
-
 }
